@@ -1,0 +1,7 @@
+env: "prod"
+redis_conn: "redis_prod:6379"
+postgres_conn: "postgres://postgres:postgres@pg_db_prod:5432/ttps?sslmode=disable"
+http_server:
+  address: "0.0.0.0:8080"
+  req_timeout: 4s
+  idle_timeout: 60s

@@ -1,0 +1,47 @@
+version: "3.8"
+
+services:
+  app:
+    image: query:latest
+    container_name: query_hepler
+    environment:
+      CONFIG_PATH: config/prod.yaml
+    ports:
+      - "8095:8080"
+    networks:
+      - go_network
+    restart: unless-stopped
+    depends_on:
+      pg_db:
+        condition: service_started
+      redis:
+        condition: service_started
+
+  redis:
+    image: redis:latest
+    container_name: redis_prod
+    ports:
+      - "6379:6379"
+    networks:
+      - go_network
+    restart: unless-stopped
+
+  pg_db:
+    image: whiplash2486/pg_ttps:demo
+    container_name: pg_db_prod
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - /home/volodymyr/Oleh/Docker/pgbouncer_sa/postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+    networks:
+      - go_network
+    restart: unless-stopped
+
+networks:
+  go_network:
+    driver: bridge
+
+
